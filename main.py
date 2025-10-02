@@ -97,4 +97,14 @@ def start(update, context):
 
     # Handlers
     dp.add_handler(CommandHandler("referral", referral.my_referral))
+from handlers import admin_dashboard
+from models import user
+
+def start(update, context):
+    u = update.effective_user
+    user.save_user(u)   # save new user
+    ...
+    
+    dp.add_handler(CommandHandler("admindash", admin_dashboard.admin_dashboard))
+    admin_dashboard.register(dp)
 
