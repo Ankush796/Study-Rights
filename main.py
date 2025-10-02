@@ -50,4 +50,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+from jobs.expiry import start_scheduler
+...
+    # Start background jobs
+    start_scheduler()
 
