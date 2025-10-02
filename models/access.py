@@ -26,4 +26,10 @@ def time_left(user_id: int):
     if not record:
         return None
     return record["expiry"] - datetime.datetime.utcnow()
+from models import premium
+
+def has_full_access(user_id: int):
+    if premium.has_premium(user_id):
+        return True
+    return has_access(user_id)  # from ads
 
