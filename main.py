@@ -78,4 +78,23 @@ from handlers import premium
     # Premium
     dp.add_handler(CommandHandler("premium", premium.premium_menu))
     premium.register(dp)
+from handlers import referral
+
+def start(update, context):
+    user = update.effective_user
+    args = context.args
+    if args:
+        referral.start_with_referral(update, context)
+    update.message.reply_text(
+        f"👋 Hi {user.first_name}!\n"
+        "Welcome to **Study Rights** 📚\n\n"
+        "Use /menu to explore lectures.\n"
+        "Use /referral to invite friends."
+    )
+
+    # save user to DB if not exists (optional)
+    
+
+    # Handlers
+    dp.add_handler(CommandHandler("referral", referral.my_referral))
 
