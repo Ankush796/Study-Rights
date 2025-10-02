@@ -54,4 +54,23 @@ from jobs.expiry import start_scheduler
 ...
     # Start background jobs
     start_scheduler()
+from handlers import user, admin, lectures
+from telegram.ext import Updater, CommandHandler
+
+...
+
+    # User commands
+    dp.add_handler(CommandHandler("start", user.start))
+    dp.add_handler(CommandHandler("menu", user.menu))
+    dp.add_handler(CommandHandler("profile", user.profile))
+    dp.add_handler(CommandHandler("subjects", lectures.subjects))
+
+    # Admin commands
+    dp.add_handler(CommandHandler("admin", admin.admin_panel))
+    dp.add_handler(CommandHandler("addsubject", admin.add_subject))
+    dp.add_handler(CommandHandler("addfaculty", admin.add_faculty))
+    dp.add_handler(CommandHandler("addchapter", admin.add_chapter))
+
+    # Callback queries
+    lectures.register(dp)
 
