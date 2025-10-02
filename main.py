@@ -73,4 +73,9 @@ from telegram.ext import Updater, CommandHandler
 
     # Callback queries
     lectures.register(dp)
+from handlers import premium
+
+    # Premium
+    dp.add_handler(CommandHandler("premium", premium.premium_menu))
+    premium.register(dp)
 
