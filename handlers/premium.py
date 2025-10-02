@@ -42,4 +42,13 @@ def buy_premium(update: Update, context: CallbackContext):
 
 def register(dp):
     dp.add_handler(CallbackQueryHandler(buy_premium, pattern=r"^buy:"))
+from handlers.ui import back_home
+
+def premium_menu(update, context):
+    user = update.effective_user
+    ...
+    update.message.reply_text(
+        "💎 Premium Plans:",
+        reply_markup=back_home()
+    )
 
