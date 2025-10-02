@@ -11,4 +11,12 @@ def home_keyboard():
 
 def back_home():
     return InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Home", callback_data="menu:home")]])
+import json, os
+
+LANG = os.getenv("DEFAULT_LANG", "en")
+with open(f"locales/{LANG}.json", "r", encoding="utf-8") as f:
+    TEXTS = json.load(f)
+
+def t(key, **kwargs):
+    return TEXTS[key].format(**kwargs)
 
