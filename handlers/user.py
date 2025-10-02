@@ -1,51 +1,40 @@
-from datetime import datetime, timedelta
-from pymongo import MongoClient
-import os
+ from telegram import Update
+from telegram.ext import CallbackContext
+from models.user import create_user, get_user
+from datetime import datetime
 
-MONGO_URI = os.getenv("MONGO_URI")
-client = MongoClient(MONGO_URI)
-db = client["Study Rights"]
-users = db["users"]
+def start(update: Update, context: CallbackContext):
+    user = update.effective_user
+    create_user(user.id, user.first_name)
+    update.message.reply_text(
+        f"👋 Hi {user.first_name}!\nWelcome to Study Rights 📚\n\n"
+        "👉 Use /menu to explore lectures"
+    )
 
-def get_user(user_id: int):
-    return users.find_one({"user_id": user_id})
+def menu(update: Update, context: CallbackContext):
+    update.message.reply_text(
+        "📚 Main Menu\n"
+        "1️⃣ Subjects\n"
+        "2️⃣ Ads Access\n"
+        "3️⃣ Premium Plans\n"
+        "4️⃣ Referral Rewards\n"
+        "5️⃣ /profile (Check your account)"
+    )
 
-def create_user(user_id: int, name: str):
-    if not get_user(user_id):
-        users.insert_one({
-            "user_id": user_id,
-            "name": name,
-            "joined_at": datetime.utcnow(),
-            "access_until": datetime.utcnow(),   # free trial default: none
-            "premium": False,
-            "referrals": 0,
-            "ads_watched": 0
-        })
-
-def add_access(user_id: int, hours: int):
-    """Add hours of access for user (ads/referrals)."""
-    user = get_user(user_id)
+def profile(update: Update, context: CallbackContext):
+    user = get_user(update.effective_user.id)
     if user:
-        current_expiry = user["access_until"]
-        if current_expiry < datetime.utcnow():
-            current_expiry = datetime.utcnow()
-        new_expiry = current_expiry + timedelta(hours=hours)
-        users.update_one(
-            {"user_id": user_id},
-            {"$set": {"access_until": new_expiry}}
+        expiry = user['access_until'].strftime("%Y-%m-%d %H:%M")
+        premium = "✅ Premium" if user.get("premium") else "❌ Free"
+        update.message.reply_text(
+            f"👤 Profile:\n\n"
+            f"Name: {user['name']}\n"
+            f"UserID: {user['user_id']}\n"
+            f"Access Until: {expiry}\n"
+            f"Status: {premium}\n"
+            f"Referrals: {user['referrals']}\n"
+            f"Ads Watched: {user['ads_watched']}"
         )
-        return new_expiry
-    return None
-
-def set_premium(user_id: int, months: int = 1):
-    """Upgrade to premium for X months."""
-    user = get_user(user_id)
-    if user:
-        new_expiry = datetime.utcnow() + timedelta(days=30*months)
-        users.update_one(
-            {"user_id": user_id},
-            {"$set": {"premium": True, "access_until": new_expiry}}
-        )
-        return new_expiry
-    return None
-
+    else:
+        update.message.reply_text("⚠️ User not found. Try /start again.")
+       
