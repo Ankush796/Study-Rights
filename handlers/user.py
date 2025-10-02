@@ -37,4 +37,31 @@ def profile(update: Update, context: CallbackContext):
         )
     else:
         update.message.reply_text("⚠️ User not found. Try /start again.")
-       
+     from models import premium
+
+def profile(update, context):
+    user = update.effective_user
+    badge = "💎 Premium" if premium.has_premium(user.id) else "🆓 Free User"
+    update.message.reply_text(
+        f"👤 Profile\n\n"
+        f"Name: {user.first_name}\n"
+        f"Username: @{user.username}\n"
+        f"Status: {badge}"
+    )
+from handlers.ui import home_keyboard, t
+
+def start(update, context):
+    user = update.effective_user
+    update.message.reply_text(
+        t("welcome", name=user.first_name),
+        reply_markup=home_keyboard(),
+        parse_mode="Markdown"
+    )
+
+def menu(update, context):
+    update.message.reply_text(
+        t("menu_title"),
+        reply_markup=home_keyboard(),
+        parse_mode="Markdown"
+    )
+  
