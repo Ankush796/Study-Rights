@@ -107,4 +107,14 @@ def start(update, context):
     
     dp.add_handler(CommandHandler("admindash", admin_dashboard.admin_dashboard))
     admin_dashboard.register(dp)
+from jobs.scheduler import start_scheduler
+from handlers import redirect
+
+def main():
+    ...
+    # Start scheduler
+    start_scheduler()
+
+    # Redirect command
+    dp.add_handler(CommandHandler("redirect", redirect.redirect_menu))
 
