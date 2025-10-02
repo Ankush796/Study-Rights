@@ -48,4 +48,30 @@ def set_premium(user_id: int, months: int = 1):
         )
         return new_expiry
     return None
+from pymongo import MongoClient
+import os, datetime
+
+MONGO_URI = os.getenv("MONGO_URI")
+client = MongoClient(MONGO_URI)
+db = client["Study Rights"]
+users = db["users"]
+
+def save_user(user):
+    users.update_one(
+        {"user_id": user.id},
+        {
+            "$set": {
+                "first_name": user.first_name,
+                "username": user.username,
+                "joined": datetime.datetime.utcnow()
+            }
+        },
+        upsert=True
+    )
+
+def get_total_users():
+    return users.count_documents({})
+
+def get_all_users():
+    return users.find()
 
