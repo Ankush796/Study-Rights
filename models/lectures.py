@@ -39,4 +39,30 @@ def get_chapters(subject_name: str, faculty_name: str):
             if f["name"] == faculty_name:
                 return f["chapters"]
     return []
+def add_chapter(subject_name: str, faculty_name: str, chapter_name: str, link: str, hours: int = None):
+    import datetime
+    expiry = None
+    if hours:
+        expiry = datetime.datetime.utcnow() + datetime.timedelta(hours=hours)
+
+    lectures.update_one(
+        {"subject": subject_name, "faculties.name": faculty_name},
+        {"$push": {
+            "faculties.$.chapters": {
+                "name": chapter_name,
+                "link": link,
+                "expiry": expiry
+            }
+        }}
+    )
+
+def get_chapters(subject_name: str, faculty_name: str):
+    subject = lectures.find_one({"subject": subject_name})
+    if subject:
+        import datetime
+        now = datetime.datetime.utcnow()
+        for f in subject["faculties"]:
+            if f["name"] == faculty_name:
+                return [c for c in f["chapters"] if not c.get("expiry") or c["expiry"] > now]
+    return []
 
