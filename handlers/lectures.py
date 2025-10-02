@@ -43,3 +43,11 @@ def subjects(update: Update, context: CallbackContext):
         return
     keyboard = [[InlineKeyboardButton(s, callback_data=f"subject:{s}")] for s in subjects]
     update.message.reply_text("📚 Choose a subject:", reply_markup=InlineKeyboardMarkup(keyboard))
+from models.access import has_full_access
+
+def subjects(update: Update, context: CallbackContext):
+    user = update.effective_user
+    if not has_full_access(user.id):
+        update.message.reply_text("🚫 Please watch an ad (/ads) or buy premium (/premium).")
+        return
+    ...
