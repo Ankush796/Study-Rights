@@ -1,4 +1,3 @@
-```python
 import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler
@@ -91,4 +90,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
