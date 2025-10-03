@@ -1,4 +1,3 @@
-```python
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from pymongo import MongoClient
@@ -16,7 +15,9 @@ premium = db["premium"]
 # === Job 1: Check expired user access ===
 def check_expired_access():
     now = datetime.utcnow()
-    expired_users = users.find({"access_until": {"$lt": now}, "premium": False})
+    expired_users = users.find(
+        {"access_until": {"$lt": now}, "premium": False}
+    )
 
     for u in expired_users:
         # TODO: Later add Telegram notification here
@@ -49,4 +50,3 @@ def start_scheduler():
 
     scheduler.start()
     print("⏰ Expiry scheduler started")
-```
