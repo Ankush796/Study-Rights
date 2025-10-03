@@ -117,4 +117,8 @@ def main():
 
     # Redirect command
     dp.add_handler(CommandHandler("redirect", redirect.redirect_menu))
+from config import BOT_TOKEN, ADMINS, REDIRECT_BOT, LOG_GROUP, MONGO_URI, BOT_USERNAME, DEFAULT_LANG
+
+# Example use
+print(f"✅ Bot {BOT_USERNAME} started with default lang: {DEFAULT_LANG}")
 
