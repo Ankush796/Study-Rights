@@ -1,4 +1,3 @@
-```python
 from pymongo import MongoClient
 import os
 
@@ -38,4 +37,3 @@ def get_referrer(user_id: int):
 def get_referrals(user_id: int) -> int:
     """Return number of referrals made by a given user."""
     return referrals.count_documents({"referrer": user_id})
-```
