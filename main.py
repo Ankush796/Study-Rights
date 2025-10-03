@@ -1,17 +1,17 @@
+```python
 import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler
 
-# Load environment variables
+# === Load Environment Variables ===
 load_dotenv()
-TOKEN = os.getenv("TG_BOT_TOKEN")
-ADMIN_IDS = list(map(int, os.getenv("ADMIN_IDS", "0").split(",")))
+BOT_TOKEN = os.getenv("TG_BOT_TOKEN")  # Telegram Bot Token
 
 # ====== Handlers Imports ======
 from jobs.scheduler import start_scheduler   # ✅ only scheduler.py, expiry.py removed
 from handlers import user, admin, lectures, premium, referral, admin_dashboard, redirect
 from models import user as user_model
-from config import BOT_TOKEN, ADMINS, REDIRECT_BOT, LOG_GROUP, MONGO_URI, BOT_USERNAME, DEFAULT_LANG
+from config import ADMINS, REDIRECT_BOT, LOG_GROUP, MONGO_URI, BOT_USERNAME, DEFAULT_LANG
 
 
 # ---- Simple Commands ----
@@ -50,7 +50,7 @@ async def menu(update, context):
 
 # ---- Main Function ----
 def main():
-    if not TOKEN:
+    if not BOT_TOKEN:
         print("❌ ERROR: TG_BOT_TOKEN not set in .env")
         return
 
@@ -90,3 +90,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
