@@ -1,3 +1,4 @@
+```python
 import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler
@@ -8,8 +9,7 @@ TOKEN = os.getenv("TG_BOT_TOKEN")
 ADMIN_IDS = list(map(int, os.getenv("ADMIN_IDS", "0").split(",")))
 
 # ====== Handlers Imports ======
-from jobs.expiry import start_scheduler
-from jobs.scheduler import start_scheduler as start_scheduler2
+from jobs.scheduler import start_scheduler   # ✅ only scheduler.py, expiry.py removed
 from handlers import user, admin, lectures, premium, referral, admin_dashboard, redirect
 from models import user as user_model
 from config import BOT_TOKEN, ADMINS, REDIRECT_BOT, LOG_GROUP, MONGO_URI, BOT_USERNAME, DEFAULT_LANG
@@ -82,13 +82,8 @@ def main():
     # === Background Jobs ===
     try:
         start_scheduler()
-    except Exception:
-        pass
-
-    try:
-        start_scheduler2()
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Scheduler error: {e}")
 
     print(f"✅ Bot {BOT_USERNAME} started with default lang: {DEFAULT_LANG}")
     app.run_polling()
@@ -96,3 +91,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
